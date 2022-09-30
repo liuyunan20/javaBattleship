@@ -11,8 +11,8 @@ public class Main {
             case 5: return "Fri";
             case 6: return "Sat";
             case 7: return "Sun";
+            default: throw new IllegalArgumentException();
         }
-        throw new IllegalArgumentException();
     }
 
     /* Do not change code below */
