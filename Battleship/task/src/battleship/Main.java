@@ -1,16 +1,9 @@
 package battleship;
 
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Main {
-    static final Map<String, Integer> ships =
-            new TreeMap<>(Map.of("Aircraft Carrier", 5,
-                    "Battleship", 4,
-                    "Submarine", 3,
-                    "Cruiser", 3,
-                    "Destroyer", 2));
+
     static int[][] parseInput(String input) {
         String start = input.split("\\s+")[0];
         String end = input.split("\\s+")[1];
@@ -25,7 +18,7 @@ public class Main {
         if (end.charAt(0) == 'A') {
             endR = 0;
         } else {
-            endR = start.charAt(0) - 'A';
+            endR = end.charAt(0) - 'A';
         }
         startC = Integer.parseInt(start.substring(1)) - 1;
         endC = Integer.parseInt(end.substring(1)) - 1;
@@ -39,7 +32,7 @@ public class Main {
     static boolean checkInputValid(int[][] coo, Field field, String name, int length) {
         if (coo[0][0] != coo[1][0] &&
                 coo[0][1] != coo[1][1]) {
-            System.out.println("Error! Wrong ship location! Try again:\n");
+            System.out.println("Error! Wrong ship location! Try again:");
             return false;
         }
         if (Math.abs(coo[0][0] - coo[1][0]) != length - 1 && Math.abs(coo[0][1] - coo[1][1]) != length - 1) {
@@ -47,14 +40,14 @@ public class Main {
             return false;
         }
 
-        int rowStart = Math.max(coo[0][0] - 1, 0);
-        int rowEnd = Math.min(coo[1][0] + 1, 10);
-        int colStart = Math.max(coo[0][1] - 1, 0);
-        int colEnd = Math.min(coo[1][1] + 1, 10);
+        int rowStart = Math.max(coo[0][0] - 2, 0);
+        int rowEnd = Math.min(coo[1][0] + 2, 10);
+        int colStart = Math.max(coo[0][1] - 2, 0);
+        int colEnd = Math.min(coo[1][1] + 2, 10);
         for (int i = rowStart; i < rowEnd; i++) {
             for (int j = colStart; j < colEnd; j++) {
-                if (field.getSymbol(i, j) == '0') {
-                    System.out.println("Error! You placed it too close to another one. Try again:\n");
+                if (field.getSymbol(i, j) == 'O') {
+                    System.out.println("Error! You placed it too close to another one. Try again:");
                     return false;
                 }
             }
@@ -63,13 +56,20 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        final List<Ship> ships = new ArrayList<>();
+        ships.add(new Ship("Aircraft Carrier", 5));
+        ships.add(new Ship("Battleship", 4));
+        ships.add(new Ship("Submarine", 3));
+        ships.add(new Ship("Cruiser", 3));
+        ships.add(new Ship("Destroyer", 2));
+
         Scanner scanner = new Scanner(System.in);
         Field field = new Field();
         field.printField();
 
-        for (Map.Entry<String, Integer> set: ships.entrySet()) {
-            String shipName = set.getKey();
-            Integer shipLength = set.getValue();
+        for (Ship ship: ships) {
+            String shipName = ship.name;
+            int shipLength = ship.length;
             System.out.printf("Enter the coordinates of the %s (%d cells):\n", shipName, shipLength);
             String input = scanner.nextLine();
             int[][] coo = parseInput(input);

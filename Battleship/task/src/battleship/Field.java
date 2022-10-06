@@ -23,7 +23,7 @@ public class Field {
         int endC = coo[1][1];
         for (int i = startR; i <= endR; i++) {
             for (int j = startC; j <= endC; j++) {
-                field[i][j] = '0';
+                field[i][j] = 'O';
             }
         }
     }
