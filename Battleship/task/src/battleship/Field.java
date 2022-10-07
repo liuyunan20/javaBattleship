@@ -12,8 +12,16 @@ public class Field {
         }
     }
 
-    public char getSymbol(int r, int c) {
+    public char getSymbol(int[] position) {
+        int r = position[0];
+        int c = position[1];
         return field[r][c];
+    }
+
+    public void setSymbol(int[] position, char ch) {
+        int r = position[0];
+        int c = position[1];
+        field[r][c] = ch;
     }
 
     public void setField(int[][] coo) {
