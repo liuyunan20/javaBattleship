@@ -12,19 +12,19 @@ public class Field {
         }
     }
 
-    public char getSymbol(int[] position) {
+    public char getSymbol(Integer[] position) {
         int r = position[0];
         int c = position[1];
         return field[r][c];
     }
 
-    public void setSymbol(int[] position, char ch) {
+    public void setSymbol(Integer[] position, char ch) {
         int r = position[0];
         int c = position[1];
         field[r][c] = ch;
     }
 
-    public void setField(int[][] coo) {
+    public void setField(Integer[][] coo) {
         int startR = coo[0][0];
         int endR = coo[1][0];
         int startC = coo[0][1];
@@ -62,5 +62,16 @@ public class Field {
             }
             System.out.print("\n");
         }
+    }
+
+    public boolean checkWin() {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (field[i][j] == 'O') {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

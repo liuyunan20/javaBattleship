@@ -4,12 +4,12 @@ import java.util.*;
 
 public class Main {
 
-    static int[][] parseShipInput(String input) {
+    static Integer[][] parseShipInput(String input) {
         String start = input.split("\\s+")[0];
         String end = input.split("\\s+")[1];
         int startR, startC, endR, endC;
 
-        int[][] coo = new int[2][2];
+        Integer[][] coo = new Integer[2][2];
         if (start.charAt(0) == 'A') {
             startR = 0;
         } else {
@@ -29,9 +29,9 @@ public class Main {
         return coo;
     }
 
-    static boolean checkShipInputValid(int[][] coo, Field field, String name, int length) {
-        if (coo[0][0] != coo[1][0] &&
-                coo[0][1] != coo[1][1]) {
+    static boolean checkShipInputValid(Integer[][] coo, Field field, String name, int length) {
+        if (!coo[0][0].equals(coo[1][0]) &&
+                !coo[0][1].equals(coo[1][1])) {
             System.out.println("Error! Wrong ship location! Try again:");
             return false;
         }
@@ -46,7 +46,7 @@ public class Main {
         int colEnd = Math.min(coo[1][1] + 2, 10);
         for (int i = rowStart; i < rowEnd; i++) {
             for (int j = colStart; j < colEnd; j++) {
-                if (field.getSymbol(new int[] {i, j}) == 'O') {
+                if (field.getSymbol(new Integer[] {i, j}) == 'O') {
                     System.out.println("Error! You placed it too close to another one. Try again:");
                     return false;
                 }
@@ -55,7 +55,7 @@ public class Main {
         return true;
     }
 
-    static int[] parseShotInput(String position) {
+    static Integer[] parseShotInput(String position) {
         int row, col;
         if (position.charAt(0) == 'A') {
             row = 0;
@@ -63,11 +63,11 @@ public class Main {
             row = position.charAt(0) - 'A';
         }
         col = Integer.parseInt(position.substring(1)) - 1;
-        return new int[] {row, col};
+        return new Integer[] {row, col};
 
     }
 
-    static boolean checkShotInputValid(int[] position) {
+    static boolean checkShotInputValid(Integer[] position) {
         int row = position[0];
         int col = position[1];
         if (row < 0 || row > 9 || col < 0 || col > 9) {
@@ -95,10 +95,12 @@ public class Main {
             int shipLength = ship.length;
             System.out.printf("Enter the coordinates of the %s (%d cells):\n", shipName, shipLength);
             // input coordinates of every ship
-            int[][] coo = parseShipInput(scanner.nextLine());
+            Integer[][] coo = parseShipInput(scanner.nextLine());
             while (!checkShipInputValid(coo, field, shipName, shipLength)) {
                 coo = parseShipInput(scanner.nextLine());
             }
+            // set the coordinates for ship
+            ship.setCoordinates(coo);
             // place ship in specific position and print new grids
             field.setField(coo);
             field.printField();
@@ -106,19 +108,35 @@ public class Main {
         System.out.println("The game starts!");
         field.printFogField();
         System.out.println("Take a shot!");
-        int[] shotPosition = parseShotInput(scanner.nextLine());
-        while (!checkShotInputValid(shotPosition)) {
-            shotPosition = parseShotInput(scanner.nextLine());
+        // start to check if all ship sank
+        while (!field.checkWin()) {
+            Integer[] shotPosition = parseShotInput(scanner.nextLine());
+            while (!checkShotInputValid(shotPosition)) {
+                shotPosition = parseShotInput(scanner.nextLine());
+            }
+            if (field.getSymbol(shotPosition) == 'O' || field.getSymbol(shotPosition) == 'X') { // get a hit
+                // change the field status
+                field.setSymbol(shotPosition, 'X');
+                field.printFogField();
+                if (field.checkWin()) {
+                    break;
+                }
+                // check which ship the hit position belongs to, and check if it's sank
+                for (Ship ship: ships) {
+                    if (ship.getCoordinates().contains(shotPosition)) {
+                        if (ship.checkSank(field)) {
+                            System.out.println("You sank a ship! Specify a new target:");
+                        } else {
+                            System.out.println("You hit a ship! Try again:");
+                        }
+                    }
+                }
+            } else { // get missing
+                field.setSymbol(shotPosition, 'M');
+                field.printFogField();
+                System.out.println("You missed! Try again:");
+            }
         }
-        if (field.getSymbol(shotPosition) == 'O') {
-            field.setSymbol(shotPosition, 'X');
-            field.printFogField();
-            System.out.println("You hit a ship!");
-        } else {
-            field.setSymbol(shotPosition, 'M');
-            field.printFogField();
-            System.out.println("You missed!");
-        }
-        field.printField();
+        System.out.println("You sank the last ship. You won. Congratulations!");
     }
 }
