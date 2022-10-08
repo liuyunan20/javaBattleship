@@ -104,7 +104,7 @@ public class Main {
             field.printField();
         }
         System.out.println("The game starts!");
-        field.printField();
+        field.printFogField();
         System.out.println("Take a shot!");
         int[] shotPosition = parseShotInput(scanner.nextLine());
         while (!checkShotInputValid(shotPosition)) {
@@ -112,9 +112,11 @@ public class Main {
         }
         if (field.getSymbol(shotPosition) == 'O') {
             field.setSymbol(shotPosition, 'X');
+            field.printFogField();
             System.out.println("You hit a ship!");
         } else {
             field.setSymbol(shotPosition, 'M');
+            field.printFogField();
             System.out.println("You missed!");
         }
         field.printField();

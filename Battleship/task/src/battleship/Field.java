@@ -47,4 +47,20 @@ public class Field {
             System.out.print("\n");
         }
     }
+
+    public void printFogField() {
+        System.out.println("  1 2 3 4 5 6 7 8 9 10");
+        for (int i = 0; i < 10; i++) {
+            char row = (char) ('A' + i);
+            System.out.print(String.valueOf(row) + ' ');
+            for (int j = 0; j < 10; j++) {
+                if (field[i][j] == 'X' || field[i][j] == 'M') {
+                    System.out.print(field[i][j] + " ");
+                } else {
+                    System.out.print("~ ");
+                }
+            }
+            System.out.print("\n");
+        }
+    }
 }
