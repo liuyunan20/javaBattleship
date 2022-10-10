@@ -12,7 +12,7 @@ public class Main {
             case 6: return "Sat";
             case 7: return "Sun";
             default: throw new IllegalArgumentException();
-        }
+        }       
     }
 
     /* Do not change code below */
