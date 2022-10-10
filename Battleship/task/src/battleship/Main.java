@@ -77,16 +77,9 @@ public class Main {
         return true;
     }
 
-    public static void main(String[] args) {
-        // define ships and length of ships
-        final List<Ship> ships = new ArrayList<>();
-        ships.add(new Ship("Aircraft Carrier", 5));
-        ships.add(new Ship("Battleship", 4));
-        ships.add(new Ship("Submarine", 3));
-        ships.add(new Ship("Cruiser", 3));
-        ships.add(new Ship("Destroyer", 2));
-
+    static Field placeShips(List<Ship> ships) {
         Scanner scanner = new Scanner(System.in);
+
         Field field = new Field();
         field.printField(); // print original grids
 
@@ -105,6 +98,25 @@ public class Main {
             field.setField(coo);
             field.printField();
         }
+        return field;
+    }
+
+    public static void main(String[] args) {
+        // define ships and length of ships
+        final List<Ship> ships = new ArrayList<>();
+        ships.add(new Ship("Aircraft Carrier", 5));
+        ships.add(new Ship("Battleship", 4));
+        ships.add(new Ship("Submarine", 3));
+        ships.add(new Ship("Cruiser", 3));
+        ships.add(new Ship("Destroyer", 2));
+
+        System.out.println("Player 1, place your ships on the game field");
+        Field field1 = placeShips(ships);
+        System.out.println("Press Enter and pass the move to another player\n" +
+                "...\n" +
+                "Player 2, place your ships to the game field\n");
+        Field field2 = placeShips(ships);
+
         System.out.println("The game starts!");
         field.printFogField();
         System.out.println("Take a shot!");
