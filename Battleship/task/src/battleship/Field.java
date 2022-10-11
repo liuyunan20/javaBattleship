@@ -64,7 +64,7 @@ public class Field {
         }
     }
 
-    public boolean checkWin() {
+    public boolean checkFail() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (field[i][j] == 'O') {
